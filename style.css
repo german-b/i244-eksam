@@ -11,6 +11,21 @@ div.comment {
     color:rgb(230, 219, 116);
     margin: 0px 0px 10px 0px;
 }
-form span{
-	color: #c9c987;
+div#comments span, form span {
+	display: inline-block;
+	color: #ff751a;
+	margin-bottom: 10px;
+}
+button {
+  background-color: #76726b;
+  border-radius: 5px;
+  color: #f6f6f3;
+  display: inline-block;
+  margin: auto;
+  text-decoration: none;
+  border: none;
+  padding: 5px;
+}
+button:hover {
+  background-color: #8d877c;
 }

@@ -51,7 +51,7 @@
   			<form action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" method="POST">
   				<span>Sinu kommentaar:</span>
   				<input type="text" name="comment" maxlength="140">
-  				<input type="submit" name="submit" value="Kommenteeri">
+  				<button type="submit" name="submit">Kommenteeri</button>
   			</form>
   		</div>
   	</div>
