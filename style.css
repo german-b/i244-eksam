@@ -1,11 +1,16 @@
 body {
-    background-color: lightgrey;
+    background-color: #222222;
+    font-family: 'Verdana', 'sans-serif';
 }
 
 h1 {
-    color: blue;
+    color: rgb(230, 219, 116);
 }
 
-p {
-    color:green;
+div.comment {
+    color:rgb(230, 219, 116);
+    margin: 0px 0px 10px 0px;
+}
+form span{
+	color: #c9c987;
 }

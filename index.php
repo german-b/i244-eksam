@@ -1,84 +1,58 @@
-<!DOCTYPE html>
-<html>
-<head>
-
-  <link rel="stylesheet" href="style.css">
-
-<title>Teine praktikum</title>
-</head>
-<body>
-
-
-
-<h1>
-Mu esimene PHP skript!
-</h1>
-<p>Paragraph</p>
-
-
-<p id="demo">Clock</p>
-
-
-<script>
-var myTimer = setInterval(myClock, 1000);
-function myClock() {
-    document.getElementById("demo").innerHTML =
-    new Date().toLocaleTimeString();
-}
-</script>
-
 <?php
-$file = "log.txt";
-$datei = fopen($file,"r");
-$count = fgets($datei,1000);
-fclose($datei);
-$count=$count + 1 ;
-
-// opens countlog.txt to change new hit number
-$datei = fopen($file,"w");
-fwrite($datei, $count);
-fclose($datei);
-
-    $host = "localhost";
-    $user = "test";
-    $pass = "t3st3r123";
-    $db = "test";
-
-    $l = mysqli_connect($host, $user, $pass, $db);
-    mysqli_query($l, "SET CHARACTER SET UTF8") or
-            die("Error, ei saa andmebaasi charsetti seatud");
-            
-    $ip = $_SERVER['REMOTE_ADDR'];
-    
-    $sql = "UPDATE german_alar SET count = count + 1 WHERE ip_address = '".$ip."'";
-    
-    if ($l->query($sql) === FALSE) {
-    echo "Error: " . $sql . "<br>" . $l->error;
-}    
-    
-    $sql = "SELECT ip_address, count FROM german_alar";
-	$result = $l->query($sql);
 	
-	if ($result->num_rows > 0) {
-		while($row = $result->fetch_assoc()) {
-			$data[] = $row["ip_address"];	
+	$file = "comms.txt";
+
+	if ($_SERVER["REQUEST_METHOD"] == "POST"){
+		$comment = ($_POST["comment"]);
+
+		//Kasutatud http://www.w3schools.com/php/php_form_validation.asp abi
+		$comment = trim($comment);
+		$comment = stripslashes($comment);
+		$comment = htmlspecialchars($comment);
+		$comment = $comment . "\n";
+
+		$openFile = fopen($file, 'a');
+
+		$addComment = fwrite($openFile, $comment);
+		if ($addComment){
+			$commentAdded = "Kommentaar lisatud!";
+			
 		}
+		fclose($openFile);
 	}
-	print_r($data);
-	if (in_array($ip, $data)){
-				echo "IP: " . $row["ip_address"]. " - Külastusi: " . $row["count"]. " <br>";
-			} else {
-				$sql = "INSERT INTO german_alar (ip_address, count) VALUES ('$ip', count +1)";
-				}
-
-if ($l->query($sql) === FALSE) {
-    echo "Error: " . $sql . "<br>" . $l->error;
-}    
-    mysqli_close($l);
+	
 ?>
+<html>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+  <link href="./style.css" rel="stylesheet">
+  <head>
+    <title>Kommid</title>
+    </head>
 
-<p> Külastusi lehel: <?php echo $count; ?> </p>
-<p> Sinu IP aadress: <?php echo $ip; ?> </p>
-
-</body>
-</html>
+  <body>
+  	<div id="wrap">
+  	<h1>Kommentaarid:</h1>
+  		<div id="comments">
+  		<?php
+  		if (isset($commentAdded)) {
+  			echo "<span>" . $commentAdded . "</span>";
+  		};
+  		
+  		$readFile = fopen($file,"r");
+		while(! feof($readFile)){
+			echo "<div class=\"comment\">";		
+			echo fgets($readFile);
+			echo "</div>";	
+		}
+  		?>
+  		</div>
+  		<div id="form">
+  			<form action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" method="POST">
+  				<span>Sinu kommentaar:</span>
+  				<input type="text" name="comment" maxlength="140">
+  				<input type="submit" name="submit" value="Kommenteeri">
+  			</form>
+  		</div>
+  	</div>
+  </body>
